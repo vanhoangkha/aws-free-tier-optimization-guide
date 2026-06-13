@@ -1,8 +1,23 @@
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 jobs:
-  check:
+  validate-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: echo "CI passed"
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate README structure
+        shell: bash
+        run: |
+          test -s README.md
+          grep -q "AWS Free Tier" README.md
+          grep -q "Monitoring" README.md
+          grep -q "Roadmap" README.md
+          grep -q "FAQ" README.md
